@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Almet-Pulse | Frosty Minimal v2</title>
+    <title>Almet-Pulse | Frosty Floating</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -19,8 +19,8 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
             background: #000;
             background-image: 
-                radial-gradient(circle at 0% 0%, #1e3a8a 0%, transparent 45%),
-                radial-gradient(circle at 100% 100%, #1e40af 0%, transparent 45%),
+                radial-gradient(circle at 5% 5%, #1e3a8a 0%, transparent 40%),
+                radial-gradient(circle at 95% 95%, #1e40af 0%, transparent 40%),
                 radial-gradient(circle at 50% 50%, #0a0f1d 0%, #000 100%);
             color: #fff;
             margin: 0;
@@ -38,66 +38,68 @@
             box-shadow: 0 10px 40px rgba(0,0,0,0.3);
         }
 
-        .bento-card {
-            border-radius: 32px;
-            padding: 24px;
-            transition: transform 0.2s ease, background 0.3s ease;
-        }
-
-        .bento-card:active {
-            transform: scale(0.97);
-        }
-
-        /* Навигация */
-        .bottom-nav {
+        /* Плавающая навигация */
+        .bottom-nav-wrapper {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 85px;
-            background: rgba(0,0,0,0.4);
-            backdrop-filter: blur(30px);
-            border-top: 1px solid rgba(255,255,255,0.1);
+            bottom: 24px;
+            left: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+
+        .bottom-nav {
+            height: 76px;
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 38px;
             display: flex;
             justify-content: space-around;
             align-items: center;
-            padding-bottom: env(safe-area-inset-bottom);
-            z-index: 100;
+            padding: 0 10px;
         }
 
         .nav-icon {
             font-size: 20px;
-            color: rgba(255,255,255,0.3);
+            color: rgba(255,255,255,0.35);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
-            padding: 10px;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
         }
 
         .nav-icon.active {
             color: #fff;
-            transform: translateY(-2px);
-            text-shadow: 0 0 15px rgba(255,255,255,0.6);
+            background: rgba(255,255,255,0.1);
         }
 
         .pay-trigger {
-            width: 64px;
-            height: 64px;
+            width: 56px;
+            height: 56px;
             background: #fff;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #000;
-            box-shadow: 0 0 30px rgba(255,255,255,0.4);
-            transform: translateY(-15px);
+            box-shadow: 0 8px 25px rgba(255,255,255,0.3);
             cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .pay-trigger:active {
+            transform: scale(0.9);
         }
 
         .screen {
             display: none;
             height: 100%;
             overflow-y: auto;
-            padding: 70px 24px 120px;
+            padding: 70px 24px 130px;
             animation: screenIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
@@ -106,8 +108,47 @@
         }
 
         @keyframes screenIn {
-            from { opacity: 0; transform: translateY(20px) scale(0.98); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Сложная карта */
+        .map-canvas {
+            height: 440px;
+            border-radius: 40px;
+            position: relative;
+            overflow: hidden;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .line-red { position: absolute; background: #ef4444; box-shadow: 0 0 10px #ef4444; }
+        .line-blue { position: absolute; background: #3b82f6; box-shadow: 0 0 10px #3b82f6; }
+
+        .station-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #fff;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            border: 2px solid #000;
+        }
+
+        .station-dot.hub {
+            width: 14px;
+            height: 14px;
+            background: #000;
+            border: 3px solid #fff;
+        }
+
+        .station-label {
+            position: absolute;
+            font-size: 9px;
+            font-weight: 700;
+            color: rgba(255,255,255,0.6);
+            white-space: nowrap;
+            transform: translateY(10px);
         }
 
         /* Переключатель */
@@ -117,68 +158,25 @@
             background: rgba(255,255,255,0.1);
             border-radius: 20px;
             position: relative;
-            transition: background 0.3s;
             cursor: pointer;
-            border: 1px solid rgba(255,255,255,0.1);
         }
-
-        .toggle-btn.on {
-            background: #3b82f6;
-        }
-
+        .toggle-btn.on { background: #3b82f6; }
         .toggle-knob {
-            width: 20px;
-            height: 20px;
-            background: #fff;
-            border-radius: 50%;
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            width: 20px; height: 20px; background: #fff; border-radius: 50%;
+            position: absolute; top: 3px; left: 3px; transition: 0.3s;
         }
+        .toggle-btn.on .toggle-knob { transform: translateX(22px); }
 
-        .toggle-btn.on .toggle-knob {
-            transform: translateX(22px);
-        }
-
-        /* QR Модалка */
         #qr {
-            display: none;
-            position: fixed;
-            inset: 0;
-            z-index: 200;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(50px);
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 30px;
-        }
-
-        .nfc-hint {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.1));
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            border-radius: 24px;
-            padding: 16px 24px;
-            margin-top: 30px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            animation: pulseHint 2s infinite ease-in-out;
-        }
-
-        @keyframes pulseHint {
-            0%, 100% { transform: scale(1); opacity: 0.9; }
-            50% { transform: scale(1.02); opacity: 1; }
+            display: none; position: fixed; inset: 0; z-index: 200;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(50px);
+            flex-direction: column; align-items: center; justify-content: center; padding: 30px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Экраны -->
-    
-    <!-- HOME (ГЛАВНАЯ) -->
+    <!-- HOME -->
     <div id="home" class="screen active">
         <header class="flex justify-between items-center mb-10 cursor-pointer" onclick="show('home')">
             <div>
@@ -192,16 +190,14 @@
 
         <div class="frost-panel p-8 rounded-[48px] mb-8 text-center relative overflow-hidden">
             <p class="text-[10px] font-bold uppercase tracking-[0.4em] text-gray-400 mb-2">Кошелек</p>
-            <h2 class="text-5xl font-black mb-6 tracking-tighter" id="bal">420,50 ₽</h2>
-            <button onclick="topUp()" class="bg-white text-black px-10 py-3.5 rounded-full font-bold text-sm active:scale-95 transition-transform shadow-lg shadow-white/10">
+            <h2 class="text-5xl font-black mb-6" id="bal">420,50 ₽</h2>
+            <button onclick="topUp()" class="bg-white text-black px-10 py-3.5 rounded-full font-bold text-sm">
                 Пополнить
             </button>
-            <!-- Легкое свечение -->
-            <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-blue-600/20 blur-3xl pointer-events-none"></div>
         </div>
 
         <div class="grid grid-cols-2 gap-4">
-            <div class="frost-panel bento-card col-span-2 flex justify-between items-center">
+            <div class="frost-panel p-6 rounded-[32px] col-span-2 flex justify-between items-center">
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center">
                         <i class="fa-solid fa-train-subway"></i>
@@ -214,146 +210,130 @@
                 <div class="text-3xl font-black">02:14</div>
             </div>
             
-            <div class="frost-panel bento-card flex flex-col gap-5 items-start">
-                <div class="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400">
-                    <i class="fa-solid fa-bicycle text-xl"></i>
-                </div>
+            <div class="frost-panel p-6 rounded-[32px] flex flex-col gap-4">
+                <i class="fa-solid fa-bicycle text-2xl text-emerald-400"></i>
                 <span class="font-bold text-sm">Велопрокат</span>
             </div>
             
-            <div class="frost-panel bento-card flex flex-col gap-5 items-start">
-                <div class="w-10 h-10 rounded-xl bg-orange-500/20 flex items-center justify-center text-orange-400">
-                    <i class="fa-solid fa-bus text-xl"></i>
-                </div>
+            <div class="frost-panel p-6 rounded-[32px] flex flex-col gap-4">
+                <i class="fa-solid fa-bus text-2xl text-orange-400"></i>
                 <span class="font-bold text-sm">Автобусы</span>
             </div>
         </div>
     </div>
 
-    <!-- MAP (КАРТА) -->
+    <!-- MAP -->
     <div id="map" class="screen">
         <header class="flex items-center gap-4 mb-8 cursor-pointer" onclick="show('home')">
             <i class="fa-solid fa-chevron-left text-gray-400"></i>
-            <h2 class="text-2xl font-black">Карта линий</h2>
+            <h2 class="text-2xl font-black">Карта города</h2>
         </header>
         
-        <div class="h-[400px] border-radius-[40px] frost-panel rounded-[40px] relative overflow-hidden border-white/10">
-            <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 30px 30px;"></div>
+        <div class="map-canvas">
+            <!-- Сетка -->
+            <div class="absolute inset-0 opacity-10" style="background-image: linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px); background-size: 40px 40px;"></div>
             
-            <!-- Схема -->
-            <div class="absolute inset-y-12 left-1/2 w-[2px] bg-white/10 -translate-x-1/2"></div>
-            <div class="absolute top-[15%] left-1/2 -translate-x-1/2 w-4 h-4 rounded-full border-2 border-white bg-black"></div>
-            <div class="absolute top-[45%] left-1/2 -translate-x-1/2 w-6 h-6 rounded-full border-4 border-blue-500 bg-white"></div>
-            <div class="absolute top-[80%] left-1/2 -translate-x-1/2 w-4 h-4 rounded-full border-2 border-white bg-black"></div>
+            <!-- Линия 1 (Красная) -->
+            <div class="line-red w-[1px] h-[300px] left-1/2 -translate-x-1/2 top-10"></div>
+            <!-- Линия 2 (Синяя) -->
+            <div class="line-blue h-[1px] w-[200px] top-[45%] left-[20%]"></div>
+            <div class="line-blue w-[1px] h-[100px] top-[45%] left-[70%]"></div>
+
+            <!-- Станции Линия 1 -->
+            <div class="station-dot top-[10%] left-1/2" title="Алсу"><span class="station-label">Мкр. Алсу</span></div>
+            <div class="station-dot top-[28%] left-1/2" title="Панорама"><span class="station-label">Панорама</span></div>
+            <div class="station-dot hub top-[45%] left-1/2" title="Площадь"><span class="station-label -translate-x-full pr-4 text-white">Пл. Нефтяников</span></div>
+            <div class="station-dot top-[65%] left-1/2" title="Автовокзал"><span class="station-label">Автовокзал</span></div>
+            <div class="station-dot top-[85%] left-1/2" title="Промзона"><span class="station-label">Промзона</span></div>
+
+            <!-- Станции Линия 2 -->
+            <div class="station-dot top-[45%] left-[20%]" title="Озеро"><span class="station-label">Гор. Озеро</span></div>
+            <div class="station-dot top-[45%] left-[70%]" title="АГТУ"><span class="station-label">Университет</span></div>
+            <div class="station-dot top-[68%] left-[70%]" title="Заречье"><span class="station-label">Заречье</span></div>
             
-            <div id="train" class="absolute left-1/2 -translate-x-1/2 w-12 h-7 bg-blue-600 rounded-lg flex items-center justify-center text-[11px] font-black shadow-xl" style="top: 30%">104</div>
-            
-            <div class="absolute top-4 right-4 bg-black/40 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold border border-white/10">LIVE</div>
+            <!-- Поезд -->
+            <div id="train" class="absolute left-1/2 -translate-x-1/2 w-10 h-6 bg-white rounded flex items-center justify-center text-[10px] text-black font-black z-10 shadow-lg shadow-white/20" style="top: 35%">104</div>
         </div>
 
         <div class="mt-6 p-6 frost-panel rounded-[32px] flex items-center gap-4">
             <div class="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div>
-            <p class="text-sm font-medium text-gray-300">Движение в норме. Интервал 4 мин.</p>
+            <p class="text-xs font-medium text-gray-300">Все линии работают в штатном режиме</p>
         </div>
     </div>
 
-    <!-- SETTINGS (ПРОФИЛЬ И ИСТОРИЯ) -->
+    <!-- SETTINGS (С ИСТОРИЕЙ) -->
     <div id="settings" class="screen">
         <header class="flex items-center gap-4 mb-8 cursor-pointer" onclick="show('home')">
             <i class="fa-solid fa-chevron-left text-gray-400"></i>
-            <h2 class="text-2xl font-black">Настройки</h2>
+            <h2 class="text-2xl font-black">Профиль</h2>
         </header>
 
-        <div class="space-y-4 mb-10">
+        <div class="space-y-4 mb-8">
             <div class="frost-panel p-6 rounded-[32px] flex justify-between items-center">
-                <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-400">
-                        <i class="fa-solid fa-face-smile"></i>
-                    </div>
-                    <span class="font-bold">FacePay</span>
-                </div>
-                <div class="toggle-btn on" onclick="toggle(this)">
-                    <div class="toggle-knob"></div>
-                </div>
+                <span class="font-bold">FacePay</span>
+                <div class="toggle-btn on" onclick="toggle(this)"><div class="toggle-knob"></div></div>
             </div>
-            
             <div class="frost-panel p-6 rounded-[32px] flex justify-between items-center">
-                <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center text-gray-400">
-                        <i class="fa-solid fa-bell"></i>
-                    </div>
-                    <span class="font-bold">Уведомления</span>
-                </div>
-                <div class="toggle-btn" onclick="toggle(this)">
-                    <div class="toggle-knob"></div>
-                </div>
+                <span class="font-bold">Уведомления</span>
+                <div class="toggle-btn" onclick="toggle(this)"><div class="toggle-knob"></div></div>
             </div>
         </div>
 
-        <div class="flex items-center justify-between mb-6 px-2">
-            <h3 class="text-xl font-black">История транзакций</h3>
-            <button class="text-xs font-bold text-blue-400 uppercase tracking-widest">Все</button>
-        </div>
-        
-        <div id="hist" class="space-y-3">
-            <!-- Сюда рендерится история -->
-        </div>
+        <h3 class="text-xl font-black mb-6 px-2">История поездок</h3>
+        <div id="hist" class="space-y-3"></div>
     </div>
 
     <!-- QR MODAL -->
     <div id="qr" onclick="closeQr()">
         <div class="w-full max-w-sm flex flex-col items-center" onclick="event.stopPropagation()">
-            <!-- Настоящий QR-код через API -->
-            <div class="bg-white p-8 rounded-[60px] shadow-2xl shadow-blue-500/20 mb-10 border-[12px] border-white/20">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=ALMET-PULSE-TICKET-VALID" 
-                     alt="QR Code" class="w-48 h-48">
+            <div class="bg-white p-8 rounded-[60px] mb-10">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=ALMET-PULSE-VALID" class="w-48 h-48">
             </div>
-            
-            <p class="text-2xl font-black mb-2">Ваш билет</p>
-            <p class="text-gray-400 text-sm font-medium mb-4">Действителен до 15:45</p>
+            <p class="text-2xl font-black mb-2 text-center">Ваш билет активен</p>
+            <p class="text-gray-400 text-sm mb-10 text-center">Приложите QR к сканеру или используйте NFC</p>
 
-            <!-- NFC Опция -->
-            <div class="nfc-hint">
-                <i class="fa-solid fa-nfc text-2xl text-blue-400"></i>
+            <div class="bg-white/10 border border-white/20 rounded-3xl p-5 flex items-center gap-4 w-full">
+                <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white">
+                    <i class="fa-solid fa-nfc text-xl"></i>
+                </div>
                 <div class="text-left">
-                    <p class="text-xs font-black uppercase tracking-wider text-blue-400">NFC Оплата</p>
-                    <p class="text-[11px] text-gray-300">Приложите телефон к терминалу</p>
+                    <p class="text-[10px] font-black uppercase text-blue-400 tracking-widest">NFC Оплата</p>
+                    <p class="text-xs text-white/80">Просто поднесите смартфон</p>
                 </div>
             </div>
-
-            <button onclick="closeQr()" class="mt-12 text-xs font-black uppercase tracking-[0.3em] text-white/30 hover:text-white transition-colors">Закрыть</button>
+            
+            <button onclick="closeQr()" class="mt-10 text-xs font-bold uppercase tracking-widest text-white/30">Закрыть</button>
         </div>
     </div>
 
-    <!-- NAV BAR -->
-    <nav class="bottom-nav">
-        <div onclick="show('home', this)" class="nav-icon active"><i class="fa-solid fa-house-chimney"></i></div>
-        <div onclick="show('map', this)" class="nav-icon"><i class="fa-solid fa-route-interstate"></i></div>
-        <div onclick="openQr()" class="pay-trigger">
-            <i class="fa-solid fa-qrcode text-2xl"></i>
-        </div>
-        <div onclick="show('settings', this)" class="nav-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
-        <div onclick="show('settings', this)" class="nav-icon"><i class="fa-solid fa-circle-user"></i></div>
-    </nav>
+    <!-- FLOATING NAV BAR -->
+    <div class="bottom-nav-wrapper">
+        <nav class="bottom-nav">
+            <div onclick="show('home', this)" class="nav-icon active"><i class="fa-solid fa-house"></i></div>
+            <div onclick="show('map', this)" class="nav-icon"><i class="fa-solid fa-map-location-dot"></i></div>
+            <div onclick="openQr()" class="pay-trigger">
+                <i class="fa-solid fa-qrcode text-2xl"></i>
+            </div>
+            <div onclick="show('settings', this)" class="nav-icon"><i class="fa-solid fa-circle-user"></i></div>
+        </nav>
+    </div>
 
     <script>
         let balance = 420.50;
         const historyData = [
-            { name: 'Мкр. Алсу', date: 'Сегодня, 12:00', price: -35, type: 'trip' },
-            { name: 'Пополнение СБП', date: 'Сегодня, 10:30', price: 200, type: 'topup' },
-            { name: 'Пл. Нефтяников', date: 'Вчера, 18:45', price: -35, type: 'trip' }
+            { name: 'Мкр. Алсу', date: 'Сегодня, 12:00', price: -35 },
+            { name: 'Пополнение', date: 'Сегодня, 10:30', price: 200 },
+            { name: 'Университет', date: 'Вчера, 09:15', price: -35 }
         ];
 
         function show(id, el) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             
-            // Обновляем иконки в навигаторе
             if (el && !el.classList.contains('pay-trigger')) {
                 document.querySelectorAll('.nav-icon').forEach(n => n.classList.remove('active'));
                 el.classList.add('active');
             } else if (id === 'home') {
-                // Если переход на главную через логотип
                 document.querySelectorAll('.nav-icon').forEach(n => n.classList.remove('active'));
                 document.querySelector('.nav-icon:first-child').classList.add('active');
             }
@@ -368,7 +348,6 @@
 
         function openQr() {
             document.getElementById('qr').style.display = 'flex';
-            if(window.navigator.vibrate) window.navigator.vibrate([30, 50]);
         }
 
         function closeQr() {
@@ -380,14 +359,9 @@
             if(!h) return;
             h.innerHTML = historyData.map(i => `
                 <div class="frost-panel p-5 rounded-[28px] flex justify-between items-center border-white/5">
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-sm">
-                            <i class="fa-solid ${i.type === 'trip' ? 'fa-train-subway text-blue-400' : 'fa-plus text-emerald-400'}"></i>
-                        </div>
-                        <div>
-                            <p class="font-bold text-sm">${i.name}</p>
-                            <p class="text-[10px] text-gray-500 font-bold uppercase tracking-tight">${i.date}</p>
-                        </div>
+                    <div>
+                        <p class="font-bold text-sm">${i.name}</p>
+                        <p class="text-[10px] text-gray-500 font-bold uppercase">${i.date}</p>
                     </div>
                     <span class="font-black ${i.price > 0 ? 'text-emerald-400' : 'text-white'}">
                         ${i.price > 0 ? '+' : ''}${i.price} ₽
@@ -399,22 +373,21 @@
         function topUp() {
             balance += 100;
             document.getElementById('bal').innerText = balance.toFixed(2).replace('.', ',') + ' ₽';
-            historyData.unshift({ name: 'Пополнение кошелька', date: 'Только что', price: 100, type: 'topup' });
-            if(window.navigator.vibrate) window.navigator.vibrate(25);
+            historyData.unshift({ name: 'Пополнение', date: 'Только что', price: 100 });
             if(document.getElementById('settings').classList.contains('active')) renderHistory();
+            if(window.navigator.vibrate) window.navigator.vibrate(20);
         }
 
-        // Анимация движения поезда
-        let trainPos = 30;
+        // Анимация поезда
+        let trainPos = 35;
         let direction = 0.08;
         setInterval(() => {
             trainPos += direction;
-            if(trainPos > 75 || trainPos < 15) direction *= -1;
+            if(trainPos > 80 || trainPos < 10) direction *= -1;
             const t = document.getElementById('train');
             if(t) t.style.top = trainPos + '%';
         }, 40);
 
-        // Инициализация
         renderHistory();
     </script>
 </body>
